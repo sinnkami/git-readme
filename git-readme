@@ -1,0 +1,32 @@
+#!/bin/bash
+#===============================================================================
+# ■ git-readmeコマンド
+#-------------------------------------------------------------------------------
+#   readmeを編集した時に実行するとreadmeだけをgitにコミットしてくれ、
+#   readmeがなかった場合、現在のディレクトリの名前だけのreadmeを作成してコミット
+#   してくれるコマンド
+#
+#   使い方: ターミナル上に「git readme」と入力する
+#                                                                       ver1.0.0
+#                                                              作成日:2017/02/02
+#===============================================================================
+
+file="README.md"
+dir=$(pwd)
+
+function get_last_dir() {
+  path=$1
+
+  array=( `echo $path | tr -s '/' ' '`)
+  last_index=`expr ${#array[@]} - 1`
+  echo ${array[${last_index}]}
+  return 0
+}
+
+if [[ -e $file ]]; then
+  git add $file || exit
+  git commit -m "fix README"
+else
+  echo "# "`get_last_dir $dir` > ./README.md
+  echo "READMEを作成しました"
+fi
